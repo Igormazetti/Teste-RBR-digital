@@ -5,5 +5,6 @@ const employeeRouter = Router();
 const employeeController = new EmployeesController();
 
 employeeRouter.post('/', employeeController.create);
+employeeRouter.put('/:id', employeeController.update);
 
 export default employeeRouter;
