@@ -1,9 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Employee } from "@/app/page";
 import { Table, Thead, Tbody, Tr, Th, Td, Box, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "../Button/ButtonComponent";
+import RemoveEmployeesDialog from "@/app/employees/components/RemoveEmployeesDialog";
+import axios from "axios";
 
 interface EmployeesTableProps {
   employees: Employee[];
@@ -11,37 +13,70 @@ interface EmployeesTableProps {
 
 export default function EmployeesTable({ employees }: EmployeesTableProps) {
   const route = useRouter();
+  const [openRemoveDialog, setOpenRemoveDialog] = useState<boolean>(false);
+  const [idToRemove, setIdToRemove] = useState<string>();
+
+  const handleRemoveEmployee = async () => {
+    try {
+      await axios.delete(`http://localhost:6060/api/employees/${idToRemove}`);
+      setOpenRemoveDialog(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-    <Box overflowX="auto" height="calc(100vh - 200px)" borderBottom="1px" borderColor="gray.200">
-      <Table variant="simple" border="1px" rounded="md" borderColor="gray.200">
-        <Thead>
-          <Tr>
-            <Th>Nome</Th>
-            <Th>Cargo</Th>
-            <Th>Departamento</Th>
-            <Th textAlign="center">Ações</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {employees.map((employee) => (
-            <Tr key={employee._id}>
-              <Td>{employee.name}</Td>
-              <Td>{employee.job}</Td>
-              <Td>{employee.department}</Td>
-              <Td display="flex" gap={2} justifyContent="center">
-                <ButtonComponent color="teal" size="sm" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
-                  Editar
-                </ButtonComponent>
+    <>
+      <Box display="flex" w="full" justifyContent="end" mb={4}>
+        <ButtonComponent color="blue" size="lg" onClick={() => route.push("/employees/add")}>
+          Adicionar Funcionário
+        </ButtonComponent>
+      </Box>
 
-                <ButtonComponent color="red" size="sm" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
-                  Excluir
-                </ButtonComponent>
-              </Td>
+      <Box overflowX="auto" height="calc(100vh - 200px)">
+        <Table variant="simple" border="1px" rounded="md" borderColor="gray.200">
+          <Thead>
+            <Tr>
+              <Th>Nome</Th>
+              <Th>Cargo</Th>
+              <Th>Departamento</Th>
+              <Th textAlign="center">Ações</Th>
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </Box>
+          </Thead>
+          <Tbody>
+            {employees.map((employee) => (
+              <Tr key={employee._id}>
+                <Td>{employee.name}</Td>
+                <Td>{employee.job}</Td>
+                <Td>{employee.department}</Td>
+                <Td display="flex" gap={2} justifyContent="center">
+                  <ButtonComponent color="teal" size="sm" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
+                    Editar
+                  </ButtonComponent>
+
+                  <ButtonComponent
+                    color="red"
+                    size="sm"
+                    onClick={() => {
+                      setIdToRemove(employee._id);
+                      setOpenRemoveDialog(true);
+                    }}
+                  >
+                    Excluir
+                  </ButtonComponent>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+      <RemoveEmployeesDialog
+        isOpen={openRemoveDialog}
+        onClose={() => {
+          setOpenRemoveDialog(false);
+        }}
+        handleRemove={handleRemoveEmployee}
+      />
+    </>
   );
 }

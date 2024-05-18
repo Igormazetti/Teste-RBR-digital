@@ -10,7 +10,7 @@ interface DialogProps {
 export default function Dialog({ isOpen, onClose, children }: DialogProps) {
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalCloseButton />
