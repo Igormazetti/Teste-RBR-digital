@@ -4,12 +4,14 @@ export interface IEmployee {
   name: string;
   job: string;
   department: string;
+  admission: Date;
 }
 
 export interface EmployeeDoc extends mongoose.Document {
   name: string;
   job: string;
   department: string;
+  admission: Date;
 }
 
 interface IEmployeeModel extends mongoose.Model<EmployeeDoc> {
@@ -27,6 +29,10 @@ const employeeSchema = new mongoose.Schema({
   },
   department: {
     type: String,
+    required: true,
+  },
+  admission: {
+    type: Date,
     required: true,
   },
 });

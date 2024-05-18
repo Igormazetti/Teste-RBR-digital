@@ -5,6 +5,7 @@ interface IRequest {
   name: string;
   job: string;
   department: string;
+  admission: Date;
 }
 
 export default class CreateEmployeeService {
@@ -14,7 +15,7 @@ export default class CreateEmployeeService {
     this.employeeRepository = new EmployeeRepository();
   }
 
-  public async execute({ name, job, department }: IRequest) {
+  public async execute({ name, job, department, admission }: IRequest) {
     const checkIfEmployeeExists = await this.employeeRepository.findByName(
       name,
     );
@@ -23,6 +24,6 @@ export default class CreateEmployeeService {
       throw new CustomError('Funcionário já cadastrado!', 422);
     }
 
-    await this.employeeRepository.create({ name, job, department });
+    await this.employeeRepository.create({ name, job, department, admission });
   }
 }

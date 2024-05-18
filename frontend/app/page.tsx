@@ -8,6 +8,7 @@ export interface Employee {
   name: string;
   job: string;
   department: string;
+  admission: Date;
 }
 
 export default function Home() {

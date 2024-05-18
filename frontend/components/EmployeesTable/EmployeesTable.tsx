@@ -12,6 +12,7 @@ import EmployeesCard from "../EmployeesCard/EmployeesCard";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { toast } from "react-toastify";
 import { MagnifyingGlass } from "@phosphor-icons/react";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 interface EmployeesTableProps {
   employees: Employee[];
@@ -24,6 +25,8 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
   const [idToRemove, setIdToRemove] = useState<string>();
   const [search, setSearch] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
+  console.log(employees);
 
   const size = useWindowSize();
   const isMobile = useMemo(() => size.width && size.width < 660, [size]);
@@ -115,6 +118,7 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
                 </Th>
                 <Th textColor="white">Cargo</Th>
                 <Th textColor="white">Departamento</Th>
+                <Th textColor="white">Data de admissão</Th>
                 <Th textColor="white" textAlign="center">
                   Ações
                 </Th>
@@ -126,6 +130,7 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
                   <Td borderColor="gray.300">{employee.name}</Td>
                   <Td borderColor="gray.300">{employee.job}</Td>
                   <Td borderColor="gray.300">{employee.department}</Td>
+                  <Td borderColor="gray.300">{dateFormatter(employee.admission)}</Td>
                   <Td display="flex" gap={2} justifyContent="center" borderColor="gray.300">
                     <ButtonComponent color="teal" size="md" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
                       Editar

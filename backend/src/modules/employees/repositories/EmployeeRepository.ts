@@ -1,11 +1,17 @@
 import { EmployeeDoc, Employee, IEmployee } from '../models/employee';
 
 export default class EmployeeRepository {
-  public async create({ name, job, department }: IEmployee): Promise<void> {
+  public async create({
+    name,
+    job,
+    department,
+    admission,
+  }: IEmployee): Promise<void> {
     const newEmployee = Employee.build({
       name,
       job,
       department,
+      admission,
     });
 
     await newEmployee.save();

@@ -14,12 +14,13 @@ const employeeSchema = yup.object().shape({
     .min(3, 'Nome deve ter mais de três caracteres'),
   job: yup
     .string()
-    .required('Job is required')
+    .required('Cargo é obrigatório')
     .min(3, 'Cargo deve ter mais de três caracteres'),
   department: yup
     .string()
-    .required('Department is required')
+    .required('Departamento é obrigatório')
     .min(3, 'Departamento deve ter mais de três caracteres'),
+  admission: yup.date().required('Data de admissão é obrigatória'),
 });
 
 const updateEmployeeSchema = yup.object().shape({
@@ -29,6 +30,7 @@ const updateEmployeeSchema = yup.object().shape({
     .string()
     .optional()
     .min(3, 'Departamento deve ter mais de três caracteres'),
+  admission: yup.date().optional(),
 });
 
 export default class EmployeesController {
@@ -44,9 +46,9 @@ export default class EmployeesController {
     const creteEmployeeService = container.resolve(CreateEmployeeService);
     await employeeSchema.validate(request.body, { abortEarly: false });
 
-    const { name, job, department } = request.body;
+    const { name, job, department, admission } = request.body;
 
-    await creteEmployeeService.execute({ name, job, department });
+    await creteEmployeeService.execute({ name, job, department, admission });
 
     return response.status(201).json();
   }
@@ -57,11 +59,12 @@ export default class EmployeesController {
 
     const { id } = request.params;
 
-    const { name, job, department } = request.body;
+    const { name, job, department, admission } = request.body;
 
-    console.log(request.body);
-
-    await editEmployeeService.execute({ id, data: { name, job, department } });
+    await editEmployeeService.execute({
+      id,
+      data: { name, job, department, admission },
+    });
 
     return response.status(201).json();
   }

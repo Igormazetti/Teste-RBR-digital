@@ -13,6 +13,7 @@ import { Box, Button, FormControl, FormLabel, Input, FormErrorMessage, VStack, T
 import ButtonComponent from "@/components/Button/ButtonComponent";
 
 import { toast } from "react-toastify";
+import { formatISODate } from "@/utils/dateFormatter";
 
 interface EmployeesFormProps {
   employee?: Employee;
@@ -23,12 +24,14 @@ interface EmployeeFormData {
   name: string;
   job: string;
   department: string;
+  admission: string;
 }
 
 const employeeSchema = yup.object().shape({
   name: yup.string().required("Nome é obrigatório").min(3, "Quantidade de caracteres inválida, mínimo 3"),
   job: yup.string().required("Cargo é obrigatório").min(3, "Quantidade de caracteres inválida, mínimo 3"),
   department: yup.string().required("Departamento é obrigatório").min(3, "Quantidade de caracteres inválida, mínimo 3"),
+  admission: yup.string().required("Data de admissão é obrigatória"),
 });
 
 export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
@@ -44,6 +47,7 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
       name: employee && employee.name ? employee.name : "",
       job: employee && employee.job ? employee.job : "",
       department: employee && employee.department ? employee.department : "",
+      admission: employee && employee.admission ? formatISODate(employee.admission) : formatISODate(),
     },
   });
 
@@ -109,6 +113,20 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
                 id="department"
                 placeholder="Insira o departamento"
                 {...register("department")}
+              />
+              <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.department}>
+              <FormLabel htmlFor="admission">Data de admissão</FormLabel>
+              <Input
+                size="lg"
+                type="date"
+                border="1px"
+                borderColor="gray.300"
+                id="admission"
+                placeholder="Insira a data de admissão"
+                {...register("admission")}
               />
               <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
             </FormControl>

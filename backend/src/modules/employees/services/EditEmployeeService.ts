@@ -7,6 +7,7 @@ interface IRequest {
     name?: string;
     job?: string;
     department?: string;
+    admission?: Date;
   };
 }
 
