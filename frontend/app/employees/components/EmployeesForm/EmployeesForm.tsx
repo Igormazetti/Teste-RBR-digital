@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Box, Button, FormControl, FormLabel, Input, FormErrorMessage, VStack, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import ButtonComponent from "@/components/Button/ButtonComponent";
 
 interface EmployeesFormProps {
   employee?: Employee;
@@ -64,16 +65,9 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
     <VStack justifyContent="center" alignItems="center" h="full" w="full" p={4}>
       <Box display="flex" flexDirection={{ base: "column", md: "row" }} w="full" justifyContent="space-between">
         <Text>{type === "edit" ? "Editar Funcionário" : "Adicionar Funcionário"}</Text>
-
-        <Button
-          colorScheme="teal"
-          size="sm"
-          onClick={() => {
-            route.back();
-          }}
-        >
+        <ButtonComponent color="teal" size="sm" onClick={() => route.back()}>
           Voltar
-        </Button>
+        </ButtonComponent>
       </Box>
       <Box p={8} w="full" maxWidth="500px" borderWidth={1} borderRadius="lg" boxShadow="lg">
         <form onSubmit={handleSubmit(onSubmitHandler)}>

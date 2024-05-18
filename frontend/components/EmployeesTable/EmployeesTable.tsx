@@ -3,6 +3,7 @@ import React from "react";
 import { Employee } from "@/app/page";
 import { Table, Thead, Tbody, Tr, Th, Td, Box, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import ButtonComponent from "../Button/ButtonComponent";
 
 interface EmployeesTableProps {
   employees: Employee[];
@@ -29,18 +30,13 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
               <Td>{employee.job}</Td>
               <Td>{employee.department}</Td>
               <Td display="flex" gap={2} justifyContent="center">
-                <Button
-                  colorScheme="teal"
-                  size="sm"
-                  onClick={() => {
-                    route.push(`/employees/edit/${employee._id}`);
-                  }}
-                >
+                <ButtonComponent color="teal" size="sm" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
                   Editar
-                </Button>
-                <Button colorScheme="red" size="sm">
+                </ButtonComponent>
+
+                <ButtonComponent color="red" size="sm" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
                   Excluir
-                </Button>
+                </ButtonComponent>
               </Td>
             </Tr>
           ))}
