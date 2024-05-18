@@ -1,17 +1,19 @@
 "use client";
 import React, { useState } from "react";
 import { Employee } from "@/app/page";
-import { Table, Thead, Tbody, Tr, Th, Td, Box, Button } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, Td, Box, Button, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import ButtonComponent from "../Button/ButtonComponent";
-import RemoveEmployeesDialog from "@/app/employees/components/RemoveEmployeesDialog";
 import axios from "axios";
+import { queryClient } from "@/libs/react-query/queryClient";
+import RemoveEmployeesDialog from "../Dialog/RemoveEmployeesDialog";
 
 interface EmployeesTableProps {
   employees: Employee[];
+  refetch: () => void;
 }
 
-export default function EmployeesTable({ employees }: EmployeesTableProps) {
+export default function EmployeesTable({ employees, refetch }: EmployeesTableProps) {
   const route = useRouter();
   const [openRemoveDialog, setOpenRemoveDialog] = useState<boolean>(false);
   const [idToRemove, setIdToRemove] = useState<string>();
@@ -19,6 +21,7 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
   const handleRemoveEmployee = async () => {
     try {
       await axios.delete(`http://localhost:6060/api/employees/${idToRemove}`);
+      refetch();
       setOpenRemoveDialog(false);
     } catch (error) {
       console.log(error);
@@ -27,7 +30,8 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
 
   return (
     <>
-      <Box display="flex" w="full" justifyContent="end" mb={4}>
+      <Box display="flex" w="full" justifyContent="space-between" mb={4}>
+        <Text fontSize="20px">RBR Digital</Text>
         <ButtonComponent color="blue" size="lg" onClick={() => route.push("/employees/add")}>
           Adicionar Funcionário
         </ButtonComponent>

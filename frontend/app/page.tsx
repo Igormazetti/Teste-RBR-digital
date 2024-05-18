@@ -33,7 +33,7 @@ export default function Home() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <EmployeesTable employees={employeesData || []} />
+      <EmployeesTable employees={employeesData || []} refetch={refetch} />
     </div>
   );
 }

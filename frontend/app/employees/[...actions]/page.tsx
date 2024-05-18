@@ -1,5 +1,5 @@
 import axios from "axios";
-import EmployeesForm from "../components/EmployeesForm";
+import EmployeesForm from "./components/EmployeesForm";
 
 type Params = {
   params: {

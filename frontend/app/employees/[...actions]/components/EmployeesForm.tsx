@@ -8,7 +8,9 @@ import { Box, Button, FormControl, FormLabel, Input, FormErrorMessage, VStack, T
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import ButtonComponent from "@/components/Button/ButtonComponent";
-import RemoveEmployeesDialog from "./RemoveEmployeesDialog";
+import { toast } from "react-toastify";
+import { queryClient } from "@/libs/react-query/queryClient";
+import { Router } from "next/router";
 
 interface EmployeesFormProps {
   employee?: Employee;
@@ -42,22 +44,32 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
     },
   });
 
-  console.log(errors);
-
   const onSubmitHandler = async (data: EmployeeFormData) => {
     if (type === "edit" && employee) {
       try {
         await axios.put(`http://localhost:6060/api/employees/${employee._id}`, data);
-      } catch (error) {
+        toast.success("Funcionário editado com sucesso!");
+        queryClient.removeQueries({
+          queryKey: ["employees-query"],
+        });
+        route.push("/");
+      } catch (error: any) {
         console.log(error);
+        toast.error(error.message || "Falha ao editar funcionário!");
       }
     }
 
-    if (type === "add" && employee) {
+    if (type === "add") {
       try {
         await axios.post(`http://localhost:6060/api/employees`, data);
-      } catch (error) {
+        toast.success("Funcionário criado com sucesso!");
+        queryClient.removeQueries({
+          queryKey: ["employees-query"],
+        });
+        route.push("/");
+      } catch (error: any) {
         console.log(error);
+        toast.error(error.message || "Falha ao criar funcionário!");
       }
     }
   };
