@@ -11,7 +11,7 @@ import EmployeesCard from "../EmployeesCard/EmployeesCard";
 
 import { useWindowSize } from "@uidotdev/usehooks";
 import { toast } from "react-toastify";
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Funnel, MagnifyingGlass, Pencil, Trash } from "@phosphor-icons/react";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 interface EmployeesTableProps {
@@ -19,43 +19,54 @@ interface EmployeesTableProps {
   refetch: () => void;
 }
 
+interface SortProps {
+  order: "asc" | "desc";
+  date: "asc" | "desc";
+  selected: "order" | "date" | undefined;
+}
+
 export default function EmployeesTable({ employees, refetch }: EmployeesTableProps) {
   const route = useRouter();
   const [openRemoveDialog, setOpenRemoveDialog] = useState<boolean>(false);
   const [idToRemove, setIdToRemove] = useState<string>();
   const [search, setSearch] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-  const [sortOrderAdmissionDate, setSortOrderAdmissionDate] = useState<"asc" | "desc">("asc");
-
-  console.log(employees);
+  const [handleSort, setHandleSort] = useState<SortProps>({ order: "asc", date: "desc", selected: undefined });
 
   const size = useWindowSize();
   const isMobile = useMemo(() => size.width && size.width < 660, [size]);
 
   const handleSortByName = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    setHandleSort((prevState) => ({
+      ...prevState,
+      order: prevState.order === "asc" ? "desc" : "asc",
+      selected: "order",
+    }));
   };
 
   const handleSortByAdmissionDate = () => {
-    setSortOrderAdmissionDate(sortOrderAdmissionDate === "asc" ? "desc" : "asc");
+    setHandleSort((prevState) => ({
+      ...prevState,
+      date: prevState.date === "asc" ? "desc" : "asc",
+      selected: "date",
+    }));
   };
 
   const filteredRows = useMemo(() => {
     let sortedRows = [...employees];
 
-    sortedRows.sort((a, b) => {
-      if (sortOrder === "asc") {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
-
-    if (sortOrderAdmissionDate === "asc" || sortOrderAdmissionDate === "desc") {
+    if (handleSort.selected === "order") {
+      sortedRows.sort((a, b) => {
+        if (handleSort.order === "asc") {
+          return a.name.localeCompare(b.name);
+        } else {
+          return b.name.localeCompare(a.name);
+        }
+      });
+    } else if (handleSort.selected === "date") {
       sortedRows.sort((a, b) => {
         const dateA = new Date(a.admission).getTime();
         const dateB = new Date(b.admission).getTime();
-        if (sortOrderAdmissionDate === "asc") {
+        if (handleSort.date === "asc") {
           return dateA - dateB;
         } else {
           return dateB - dateA;
@@ -64,7 +75,7 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
     }
 
     return sortedRows.filter((row) => JSON.stringify(row)?.toUpperCase().includes(search.toUpperCase()));
-  }, [employees, search, sortOrder, sortOrderAdmissionDate]);
+  }, [employees, search, handleSort]);
 
   const handleRemoveEmployee = async () => {
     try {
@@ -88,7 +99,9 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
         justifyContent="space-between"
         mb={4}
       >
-        <Text fontSize="24px">RBR Digital</Text>
+        <Text fontSize="24px" fontWeight="bold">
+          RBR Digital
+        </Text>
 
         <Box display="flex" flexDirection={{ base: "column", md: "row" }} gap={4}>
           <Box display="flex" alignItems="center" position="relative">
@@ -106,7 +119,7 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
             </Box>
           </Box>
           <ButtonComponent color="blue" size="lg" onClick={() => route.push("/employees/add")}>
-            Adicionar Funcionário
+            Cadastrar Funcionário
           </ButtonComponent>
         </Box>
       </Box>
@@ -131,12 +144,18 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
             <Thead>
               <Tr bg="teal">
                 <Th textColor="white" onClick={handleSortByName} cursor="pointer">
-                  Nome
+                  <Box display="flex" gap={4} alignItems="center">
+                    Nome
+                    <Funnel size={20} />
+                  </Box>
                 </Th>
                 <Th textColor="white">Cargo</Th>
                 <Th textColor="white">Departamento</Th>
                 <Th textColor="white" onClick={handleSortByAdmissionDate} cursor="pointer">
-                  Data de admissão
+                  <Box display="flex" gap={4} alignItems="center">
+                    Data de admissão
+                    <Funnel size={20} />
+                  </Box>
                 </Th>
                 <Th textColor="white" textAlign="center">
                   Ações
@@ -151,20 +170,24 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
                   <Td borderColor="gray.300">{employee.department}</Td>
                   <Td borderColor="gray.300">{dateFormatter(employee.admission)}</Td>
                   <Td display="flex" gap={2} justifyContent="center" borderColor="gray.300">
-                    <ButtonComponent color="teal" size="md" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
-                      Editar
-                    </ButtonComponent>
+                    <Box w="80px">
+                      <ButtonComponent color="teal" size="md" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
+                        <Pencil size={20} />
+                      </ButtonComponent>
+                    </Box>
 
-                    <ButtonComponent
-                      color="red"
-                      size="md"
-                      onClick={() => {
-                        setIdToRemove(employee._id);
-                        setOpenRemoveDialog(true);
-                      }}
-                    >
-                      Excluir
-                    </ButtonComponent>
+                    <Box w="80px">
+                      <ButtonComponent
+                        color="red"
+                        size="md"
+                        onClick={() => {
+                          setIdToRemove(employee._id);
+                          setOpenRemoveDialog(true);
+                        }}
+                      >
+                        <Trash size={20} />
+                      </ButtonComponent>
+                    </Box>
                   </Td>
                 </Tr>
               ))}

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useMemo } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/libs/react-query/queryClient";
@@ -14,6 +14,8 @@ import ButtonComponent from "@/components/Button/ButtonComponent";
 
 import { toast } from "react-toastify";
 import { formatISODate } from "@/utils/dateFormatter";
+import { useWindowSize } from "@uidotdev/usehooks";
+import { ArrowCircleLeft } from "@phosphor-icons/react";
 
 interface EmployeesFormProps {
   employee?: Employee;
@@ -36,6 +38,9 @@ const employeeSchema = yup.object().shape({
 
 export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
   const route = useRouter();
+
+  const size = useWindowSize();
+  const isMobile = useMemo(() => size.width && size.width < 660, [size]);
 
   const {
     register,
@@ -82,13 +87,21 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
   };
 
   return (
-    <VStack justifyContent="center" alignItems="center" h="full" w="full" p={20}>
-      <Box display="flex" flexDirection={{ base: "column", md: "row" }} gap={{ base: 2, md: 0 }} w="full" justifyContent="space-between">
-        <Text fontSize="24px">{type === "edit" ? "Editar Funcionário" : "Adicionar Funcionário"}</Text>
-        <ButtonComponent color="teal" size="lg" onClick={() => route.back()}>
-          Voltar
-        </ButtonComponent>
+    <VStack justifyContent="center" alignItems="center" h="full" w="full" p={{ base: 4, md: 20 }}>
+      <Box display="flex" gap={{ base: 2, md: 0 }} w="full" justifyContent={{ base: "start", md: "end" }}>
+        {isMobile ? (
+          <ArrowCircleLeft size={32} color="teal" onClick={() => route.back()} />
+        ) : (
+          <Box w="200px">
+            <ButtonComponent color="teal" size="lg" onClick={() => route.back()}>
+              Voltar
+            </ButtonComponent>
+          </Box>
+        )}
       </Box>
+      <Text fontSize="24px" mb={4} fontWeight="bold">
+        {type === "edit" ? "Editar Funcionário" : "Cadastrar Funcionário"}
+      </Text>
       <Box p={8} w="full" mt={4} maxWidth="500px" borderWidth={1} borderRadius="lg" boxShadow="lg">
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <VStack spacing={4}>
@@ -131,8 +144,8 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
               <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
             </FormControl>
 
-            <Button colorScheme={type === "edit" ? "teal" : "blue"} type="submit" size="lg">
-              {type === "edit" ? "Editar" : "Adicionar"}
+            <Button w="full" colorScheme="teal" type="submit" size="lg" mt={8}>
+              {type === "edit" ? "Editar" : "Cadastrar"}
             </Button>
           </VStack>
         </form>

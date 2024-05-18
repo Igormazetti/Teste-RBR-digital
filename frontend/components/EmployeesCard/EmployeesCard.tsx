@@ -2,6 +2,7 @@ import { Employee } from "@/app/page";
 import { Box, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import ButtonComponent from "../Button/ButtonComponent";
+import { Pencil, Trash } from "@phosphor-icons/react";
 
 interface EmployeesCardProps {
   employee: Employee;
@@ -16,13 +17,13 @@ export default function EmployeesCard({ employee, handleEdit, handleDelete }: Em
       <Text>Cargo: {employee.job}</Text>
       <Text>Departamento: {employee.department}</Text>
 
-      <Box display="flex" gap={2} mt={2}>
-        <ButtonComponent color="teal" size="sm" onClick={handleEdit}>
-          Editar
+      <Box display="flex" gap={2} mt={2} w-full>
+        <ButtonComponent color="teal" size="md" onClick={handleEdit}>
+          <Pencil size={20} />
         </ButtonComponent>
 
-        <ButtonComponent color="red" size="sm" onClick={handleDelete}>
-          Excluir
+        <ButtonComponent color="red" size="md" onClick={handleDelete}>
+          <Trash size={20} />
         </ButtonComponent>
       </Box>
     </Box>

@@ -11,7 +11,7 @@ interface ButtonProps {
 
 export default function ButtonComponent({ color, size, children, onClick, ...rest }: ButtonProps) {
   return (
-    <Button colorScheme={color} size={size} onClick={onClick} {...rest}>
+    <Button colorScheme={color} size={size} onClick={onClick} w="full" {...rest}>
       {children}
     </Button>
   );

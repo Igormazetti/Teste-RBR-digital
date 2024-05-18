@@ -22,7 +22,7 @@ export default function RemoveEmployeesDialog({ isOpen, onClose, handleRemove }:
         </Text>
 
         <Box display="flex" w="full" gap={4} justifyContent="center" mt={8}>
-          <ButtonComponent color="teal" onClick={onClose} size="lg">
+          <ButtonComponent color="blue" onClick={onClose} size="lg">
             Cancelar
           </ButtonComponent>
           <ButtonComponent color="red" onClick={handleRemove} size="lg">
