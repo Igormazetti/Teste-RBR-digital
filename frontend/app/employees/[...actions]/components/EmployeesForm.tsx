@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo } from "react";
+import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { queryClient } from "@/libs/react-query/queryClient";
@@ -90,19 +90,26 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
           <VStack spacing={4}>
             <FormControl isInvalid={!!errors.name}>
               <FormLabel htmlFor="name">Nome</FormLabel>
-              <Input id="name" placeholder="Nome" {...register("name")} />
+              <Input size="lg" border="1px" borderColor="gray.300" placeholder="Insira o nome" {...register("name")} />
               <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.job}>
               <FormLabel htmlFor="job">Cargo</FormLabel>
-              <Input id="job" placeholder="Cargo" {...register("job")} />
+              <Input size="lg" border="1px" borderColor="gray.300" id="job" placeholder="Insira o cargo" {...register("job")} />
               <FormErrorMessage>{errors.job?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.department}>
               <FormLabel htmlFor="department">Departamento</FormLabel>
-              <Input id="department" placeholder="Departamento" {...register("department")} />
+              <Input
+                size="lg"
+                border="1px"
+                borderColor="gray.300"
+                id="department"
+                placeholder="Insira o departamento"
+                {...register("department")}
+              />
               <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
             </FormControl>
 

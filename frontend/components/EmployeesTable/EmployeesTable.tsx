@@ -23,11 +23,28 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
   const [openRemoveDialog, setOpenRemoveDialog] = useState<boolean>(false);
   const [idToRemove, setIdToRemove] = useState<string>();
   const [search, setSearch] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const size = useWindowSize();
   const isMobile = useMemo(() => size.width && size.width < 660, [size]);
 
-  const filteredRows = employees.filter((row) => JSON.stringify(row)?.toUpperCase().includes(search.toUpperCase())) || [];
+  const filteredRows = useMemo(() => {
+    let sortedRows = [...employees];
+
+    sortedRows.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+
+    return sortedRows.filter((row) => JSON.stringify(row)?.toUpperCase().includes(search.toUpperCase()));
+  }, [employees, search, sortOrder]);
+
+  const handleSortByName = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
 
   const handleRemoveEmployee = async () => {
     try {
@@ -51,11 +68,19 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
         justifyContent="space-between"
         mb={4}
       >
-        <Text fontSize="20px">RBR Digital</Text>
+        <Text fontSize="24px">RBR Digital</Text>
 
-        <Box display="flex" gap={4}>
+        <Box display="flex" flexDirection={{ base: "column", md: "row" }} gap={4}>
           <Box display="flex" alignItems="center" position="relative">
-            <Input id="search" size="lg" placeholder="Busca" w="300px" onChange={(event) => setSearch(event.target.value)} />
+            <Input
+              id="search"
+              size="lg"
+              placeholder="Busca"
+              w="300px"
+              border="1px"
+              borderColor="gray.300"
+              onChange={(event) => setSearch(event.target.value)}
+            />
             <Box position="absolute" right={2}>
               <MagnifyingGlass size={20} />
             </Box>
@@ -82,29 +107,33 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
         </Box>
       ) : (
         <Box overflowX="auto" height="calc(100vh - 200px)">
-          <Table variant="simple" border="1px" rounded="md" borderColor="gray.200">
+          <Table variant="simple" border="1px" rounded="md" borderColor="gray.300">
             <Thead>
-              <Tr>
-                <Th>Nome</Th>
-                <Th>Cargo</Th>
-                <Th>Departamento</Th>
-                <Th textAlign="center">Ações</Th>
+              <Tr bg="teal">
+                <Th textColor="white" onClick={handleSortByName} cursor="pointer">
+                  Nome
+                </Th>
+                <Th textColor="white">Cargo</Th>
+                <Th textColor="white">Departamento</Th>
+                <Th textColor="white" textAlign="center">
+                  Ações
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
               {filteredRows.map((employee) => (
                 <Tr key={employee._id}>
-                  <Td>{employee.name}</Td>
-                  <Td>{employee.job}</Td>
-                  <Td>{employee.department}</Td>
-                  <Td display="flex" gap={2} justifyContent="center">
-                    <ButtonComponent color="teal" size="sm" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
+                  <Td borderColor="gray.300">{employee.name}</Td>
+                  <Td borderColor="gray.300">{employee.job}</Td>
+                  <Td borderColor="gray.300">{employee.department}</Td>
+                  <Td display="flex" gap={2} justifyContent="center" borderColor="gray.300">
+                    <ButtonComponent color="teal" size="md" onClick={() => route.push(`/employees/edit/${employee._id}`)}>
                       Editar
                     </ButtonComponent>
 
                     <ButtonComponent
                       color="red"
-                      size="sm"
+                      size="md"
                       onClick={() => {
                         setIdToRemove(employee._id);
                         setOpenRemoveDialog(true);

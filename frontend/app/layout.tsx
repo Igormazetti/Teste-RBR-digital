@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={roboto.className}>
+      <body className={roboto.className} style={{ backgroundColor: "#e9e9e9" }}>
         <Providers>{children}</Providers>
       </body>
     </html>

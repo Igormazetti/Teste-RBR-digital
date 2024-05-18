@@ -11,7 +11,7 @@ interface EmployeesCardProps {
 
 export default function EmployeesCard({ employee, handleEdit, handleDelete }: EmployeesCardProps) {
   return (
-    <Box border="1px" borderRadius="md" borderColor="gray.200" p={4}>
+    <Box border="1px" borderRadius="md" borderColor="gray.300" p={4}>
       <Text>Nome: {employee.name}</Text>
       <Text>Cargo: {employee.job}</Text>
       <Text>Departamento: {employee.department}</Text>
