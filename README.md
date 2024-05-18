@@ -1,6 +1,6 @@
 # Teste RBR Digital
 
-Este projeto é constituído por uma API (pasta backend) feita com NodeJs, Express, MongoDb e Mongoose, o qual busca, cadastra, altera e deleta dados dos funcionários, e pelo frontend da aplicação (pasta frontend), feito com NextJs e ChakraUi, o qual apresenta uma tabela ao usuário com as informações dos funcionários, com opções para adicionar, editar ou remover algum funcionário.
+Este projeto é constituído por uma API (pasta backend) feita com Typescript, NodeJs, Express, MongoDb e Mongoose, o qual busca, cadastra, altera e deleta dados dos funcionários, e pelo frontend da aplicação (pasta frontend), feito com Typescript, NextJs e ChakraUi, o qual apresenta uma tabela ao usuário com as informações dos funcionários, com opções para adicionar, editar ou remover algum funcionário.
 
 ## Requisitos para rodar o projeto
 
@@ -12,16 +12,19 @@ Este projeto é constituído por uma API (pasta backend) feita com NodeJs, Expre
 - [MongoDB](https://www.mongodb.com/try/download/community)
 
 ### Como rodar na minha máquina?
+
 - Clone o projeto `git clone https://github.com/Igormazetti/Teste-RBR-digital.git`
 - Ou clone o projeto com SSH `git clone git@github.com:Igormazetti/Teste-RBR-digital.git`
 
 #### Backend
+
 - Abra um terminal mo projeto e navegue até a pasta backend `cd backend`, ou clique com o botão direito em cima da pasta "backend" e selecione "Abrir no terminal Integrado"
 - Rode `yarn` ou `npm i` para instalar os pacotes do projeto.
 - Rode `yarn dev` ou `npm run dev`
 - Pronto 🎉
 
 #### Frontend
+
 - Abra um terminal mo projeto e navegue até a pasta frontend `cd frontend`, ou clique com o botão direito em cima da pasta "frontend" e selecione "Abrir no terminal Integrado"
 - Rode `yarn` ou `npm i` para instalar os pacotes do projeto.
 - Rode `yarn dev` ou `npm run dev`
@@ -30,6 +33,7 @@ Este projeto é constituído por uma API (pasta backend) feita com NodeJs, Expre
 ### Estrutura do projeto
 
 #### Backend
+
 - `./src`: Pasta contendo o principal conteúdo do projeto;
 - `./.eslintrc.json`: Arquivo contendo as configurações o es-lint;
 - `./.prettierrc`: Arquivo contendo as configurações do Prettier;
@@ -39,9 +43,9 @@ Este projeto é constituído por uma API (pasta backend) feita com NodeJs, Expre
 - `./src/app.ts`: Arquivo com a configuração do express e conexão com o banco de dados MongoDB, utilizando mongoose.
 - `./src/server.ts`: Arquivo que configura a porta e inicia o servidor. Não foram utilizadas variáveis de ambiente no projeto.
 - `./src/modules`: Pasta que contém módulos de cada entidade existente no banco de dados. Cada módulo possui as camadas "models" que cria o schema daquela entidade no banco de dados, "repositories" que realiza as chamadas ao banco de dados, "services" que trata as regras de negócio e lida com caso de erros, "controllers" que são responsáveis por receber as requisições HTTP e retornar o resultado na requisição, e por fim "routes" onde são definidas as rotas e seus respectivos controllers.
-  
 
 #### Frontend
+
 - `./app`: É a pasta onde ficam guardadas as páginas principais do projeto;
 - `./app/page.tsx`: É a página principal do projeto, qual utiliza React-Query e Axios para buscar os dados dos funcionários e renderizá-los no componente de tabela;
 - `./app/layout.tsx`: É o arquivo do Next.js define a estrutura básica, estilos globais e metadados aplicados a todas as páginas do aplicativo, garantindo consistência visual e funcional;
