@@ -22,9 +22,9 @@ interface EmployeeFormData {
 }
 
 const employeeSchema = yup.object().shape({
-  name: yup.string().min(3, { message: "Quantidade de caracteres inválida, mínimo 3" }).required(),
-  job: yup.string().min(3, { message: "Quantidade de caracteres inválida, mínimo 3" }).required(),
-  department: yup.string().min(3, { message: "Quantidade de caracteres inválida, mínimo 3" }).required(),
+  name: yup.string().required("Nome é obrigatório").min(3, "Quantidade de caracteres inválida, mínimo 3"),
+  job: yup.string().required("Cargo é obrigatório").min(3, "Quantidade de caracteres inválida, mínimo 3"),
+  department: yup.string().required("Departamento é obrigatório").min(3, "Quantidade de caracteres inválida, mínimo 3"),
 });
 
 export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
@@ -76,19 +76,19 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
             <FormControl isInvalid={!!errors.name}>
               <FormLabel htmlFor="name">Nome</FormLabel>
               <Input id="name" placeholder="Nome" {...register("name")} />
-              <FormErrorMessage>{errors.name && errors.name.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.job}>
               <FormLabel htmlFor="job">Cargo</FormLabel>
               <Input id="job" placeholder="Cargo" {...register("job")} />
-              <FormErrorMessage>{errors.job && errors.job.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.job?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.department}>
               <FormLabel htmlFor="department">Departamento</FormLabel>
               <Input id="department" placeholder="Departamento" {...register("department")} />
-              <FormErrorMessage>{errors.department && errors.department.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
             </FormControl>
 
             <Button colorScheme="teal" type="submit">
