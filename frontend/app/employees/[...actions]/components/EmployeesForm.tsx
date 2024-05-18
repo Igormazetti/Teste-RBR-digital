@@ -78,7 +78,7 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
   };
 
   return (
-    <VStack justifyContent="center" alignItems="center" h="full" w="full" p={4}>
+    <VStack justifyContent="center" alignItems="center" h="full" w="full" p={20}>
       <Box display="flex" flexDirection={{ base: "column", md: "row" }} gap={{ base: 2, md: 0 }} w="full" justifyContent="space-between">
         <Text fontSize="24px">{type === "edit" ? "Editar Funcionário" : "Adicionar Funcionário"}</Text>
         <ButtonComponent color="teal" size="lg" onClick={() => route.back()}>
@@ -106,7 +106,7 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
               <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
             </FormControl>
 
-            <Button colorScheme="teal" type="submit" size="lg">
+            <Button colorScheme={type === "edit" ? "teal" : "blue"} type="submit" size="lg">
               {type === "edit" ? "Editar" : "Adicionar"}
             </Button>
           </VStack>
