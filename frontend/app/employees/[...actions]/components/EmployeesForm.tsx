@@ -1,16 +1,18 @@
 "use client";
-import React from "react";
-import { Employee } from "@/app/page";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, FormControl, FormLabel, Input, FormErrorMessage, VStack, Text } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
+import React, { useMemo } from "react";
 import axios from "axios";
-import ButtonComponent from "@/components/Button/ButtonComponent";
-import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { queryClient } from "@/libs/react-query/queryClient";
-import { Router } from "next/router";
+
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { Employee } from "@/app/page";
+import { Box, Button, FormControl, FormLabel, Input, FormErrorMessage, VStack, Text } from "@chakra-ui/react";
+import ButtonComponent from "@/components/Button/ButtonComponent";
+
+import { toast } from "react-toastify";
 
 interface EmployeesFormProps {
   employee?: Employee;
@@ -31,6 +33,7 @@ const employeeSchema = yup.object().shape({
 
 export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
   const route = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -55,7 +58,7 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
         route.push("/");
       } catch (error: any) {
         console.log(error);
-        toast.error(error.message || "Falha ao editar funcionário!");
+        toast.error(error.response.data.message || "Falha ao editar funcionário!");
       }
     }
 
@@ -69,20 +72,20 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
         route.push("/");
       } catch (error: any) {
         console.log(error);
-        toast.error(error.message || "Falha ao criar funcionário!");
+        toast.error(error.response.data.message || "Falha ao criar funcionário!");
       }
     }
   };
 
   return (
     <VStack justifyContent="center" alignItems="center" h="full" w="full" p={4}>
-      <Box display="flex" flexDirection={{ base: "column", md: "row" }} w="full" justifyContent="space-between">
-        <Text>{type === "edit" ? "Editar Funcionário" : "Adicionar Funcionário"}</Text>
-        <ButtonComponent color="teal" size="sm" onClick={() => route.back()}>
+      <Box display="flex" flexDirection={{ base: "column", md: "row" }} gap={{ base: 2, md: 0 }} w="full" justifyContent="space-between">
+        <Text fontSize="24px">{type === "edit" ? "Editar Funcionário" : "Adicionar Funcionário"}</Text>
+        <ButtonComponent color="teal" size="lg" onClick={() => route.back()}>
           Voltar
         </ButtonComponent>
       </Box>
-      <Box p={8} w="full" maxWidth="500px" borderWidth={1} borderRadius="lg" boxShadow="lg">
+      <Box p={8} w="full" mt={4} maxWidth="500px" borderWidth={1} borderRadius="lg" boxShadow="lg">
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <VStack spacing={4}>
             <FormControl isInvalid={!!errors.name}>
@@ -103,7 +106,7 @@ export default function EmployeesForm({ employee, type }: EmployeesFormProps) {
               <FormErrorMessage>{errors.department?.message}</FormErrorMessage>
             </FormControl>
 
-            <Button colorScheme="teal" type="submit">
+            <Button colorScheme="teal" type="submit" size="lg">
               {type === "edit" ? "Editar" : "Adicionar"}
             </Button>
           </VStack>

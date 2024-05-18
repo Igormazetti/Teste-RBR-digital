@@ -9,9 +9,9 @@ interface ButtonProps {
   onClick: () => void;
 }
 
-export default function ButtonComponent({ color, size, children, onClick }: ButtonProps) {
+export default function ButtonComponent({ color, size, children, onClick, ...rest }: ButtonProps) {
   return (
-    <Button colorScheme={color} size={size} onClick={onClick}>
+    <Button colorScheme={color} size={size} onClick={onClick} {...rest}>
       {children}
     </Button>
   );
