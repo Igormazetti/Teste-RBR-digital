@@ -25,11 +25,20 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
   const [idToRemove, setIdToRemove] = useState<string>();
   const [search, setSearch] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrderAdmissionDate, setSortOrderAdmissionDate] = useState<"asc" | "desc">("asc");
 
   console.log(employees);
 
   const size = useWindowSize();
   const isMobile = useMemo(() => size.width && size.width < 660, [size]);
+
+  const handleSortByName = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const handleSortByAdmissionDate = () => {
+    setSortOrderAdmissionDate(sortOrderAdmissionDate === "asc" ? "desc" : "asc");
+  };
 
   const filteredRows = useMemo(() => {
     let sortedRows = [...employees];
@@ -42,12 +51,20 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
       }
     });
 
-    return sortedRows.filter((row) => JSON.stringify(row)?.toUpperCase().includes(search.toUpperCase()));
-  }, [employees, search, sortOrder]);
+    if (sortOrderAdmissionDate === "asc" || sortOrderAdmissionDate === "desc") {
+      sortedRows.sort((a, b) => {
+        const dateA = new Date(a.admission).getTime();
+        const dateB = new Date(b.admission).getTime();
+        if (sortOrderAdmissionDate === "asc") {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
+      });
+    }
 
-  const handleSortByName = () => {
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-  };
+    return sortedRows.filter((row) => JSON.stringify(row)?.toUpperCase().includes(search.toUpperCase()));
+  }, [employees, search, sortOrder, sortOrderAdmissionDate]);
 
   const handleRemoveEmployee = async () => {
     try {
@@ -118,7 +135,9 @@ export default function EmployeesTable({ employees, refetch }: EmployeesTablePro
                 </Th>
                 <Th textColor="white">Cargo</Th>
                 <Th textColor="white">Departamento</Th>
-                <Th textColor="white">Data de admissão</Th>
+                <Th textColor="white" onClick={handleSortByAdmissionDate} cursor="pointer">
+                  Data de admissão
+                </Th>
                 <Th textColor="white" textAlign="center">
                   Ações
                 </Th>
