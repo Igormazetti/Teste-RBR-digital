@@ -59,6 +59,8 @@ export default class EmployeesController {
 
     const { name, job, department } = request.body;
 
+    console.log(request.body);
+
     await editEmployeeService.execute({ id, data: { name, job, department } });
 
     return response.status(201).json();

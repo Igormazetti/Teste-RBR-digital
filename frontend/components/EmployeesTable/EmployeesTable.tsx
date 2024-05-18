@@ -2,12 +2,15 @@
 import React from "react";
 import { Employee } from "@/app/page";
 import { Table, Thead, Tbody, Tr, Th, Td, Box, Button } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 interface EmployeesTableProps {
   employees: Employee[];
 }
 
 export default function EmployeesTable({ employees }: EmployeesTableProps) {
+  const route = useRouter();
+
   return (
     <Box overflowX="auto" height="calc(100vh - 200px)" borderBottom="1px" borderColor="gray.200">
       <Table variant="simple" border="1px" rounded="md" borderColor="gray.200">
@@ -26,7 +29,13 @@ export default function EmployeesTable({ employees }: EmployeesTableProps) {
               <Td>{employee.job}</Td>
               <Td>{employee.department}</Td>
               <Td display="flex" gap={2} justifyContent="center">
-                <Button colorScheme="teal" size="sm">
+                <Button
+                  colorScheme="teal"
+                  size="sm"
+                  onClick={() => {
+                    route.push(`/employees/edit/${employee._id}`);
+                  }}
+                >
                   Editar
                 </Button>
                 <Button colorScheme="red" size="sm">

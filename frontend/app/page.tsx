@@ -1,5 +1,5 @@
+import EmployeesTable from "@/components/EmployeesTable/EmployeesTable";
 import axios from "axios";
-import EmployeesTable from "./components/EmployeesTable/EmployeesTable";
 
 export interface Employee {
   _id: string;
